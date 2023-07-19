@@ -40,6 +40,17 @@
                 {{ event.cabinetName }}
             </v-col>
         </v-row>
+        <h3>Студенты</h3>
+        <v-row v-for="visit in event.visits">
+            <v-col>{{ visit.userName }}</v-col>
+            <v-col>
+                <v-checkbox
+                    v-model="visit.visited"
+                    @click="changeVisited(visit.id)"
+                    label="Пришел">
+                </v-checkbox>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 
@@ -52,15 +63,7 @@
             }
         },
         mounted() {
-            const __this = this;
-            axios({
-                method: 'get',
-                url: '/event/' + __this.$route.params.id
-            }).then(response => {
-                if(response.status === 200){
-                    __this.event = response.data;
-                }
-            });
+            this.getEventData();
         },
         computed: {
             start: function(){
@@ -71,6 +74,19 @@
             }
         },
         methods: {
+            getEventData()
+            {
+                const __this = this;
+                axios({
+                    method: 'get',
+                    url: '/event/' + __this.$route.params.id
+                }).then(response => {
+                    if(response.status === 200){
+                        console.log(response.data);
+                        __this.event = response.data;
+                    }
+                });
+            },
             dateConvert(dateString){
                 const date = new Date(dateString);
 
@@ -92,6 +108,17 @@
                 }).then(response => {
                     if(response.status === 200 && response.data > 0){
                         __this.$router.push('/');
+                    }
+                });
+            },
+            changeVisited(visitId){
+                const __this = this;
+                axios({
+                    method: 'put',
+                    url: '/visit/' + visitId + '/'
+                }).then(response => {
+                    if(response.status === 200){
+                        __this.getEventData();
                     }
                 });
             }

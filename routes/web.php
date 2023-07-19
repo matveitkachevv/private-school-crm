@@ -6,6 +6,7 @@ use App\Http\Controllers\Group;
 use App\Http\Controllers\User;
 use App\Http\Controllers\Cabinet;
 use App\Http\Controllers\Subscribe;
+use App\Http\Controllers\Visit;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,6 +43,9 @@ Route::delete('/user/{userId}', [User::class, 'delete'])->where('userId', '[0-9]
 Route::get('/cabinets/', [Cabinet::class, 'get']);
 Route::post('/cabinet/', [Cabinet::class, 'create']);
 Route::delete('/cabinet/{cabinetId}', [Cabinet::class, 'delete'])->where('cabinetId', '[0-9]+');
+
+
+Route::put('/visit/{visitId}/', [Visit::class, 'change'])->where('visitId', '[0-9]+');
 
 
 Route::post('/subscribe/', [Subscribe::class, 'create']);

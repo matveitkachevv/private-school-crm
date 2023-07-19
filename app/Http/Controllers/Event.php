@@ -31,14 +31,40 @@ class Event
     public function create(Request $request): bool
     {
         foreach($request->get('repeats') as $date){
-            DB::table('events')->insert([
-                'date_start' => (new DateTime($date['start']))->format('Y-m-d H:i:00'),
-                'date_end' => (new DateTime($date['end']))->format('Y-m-d H:i:00'),
+            $groupId = $request->get('group_id');
+            $dateStart = (new DateTime($date['start']))->format('Y-m-d H:i:00');
+            $dateEnd = (new DateTime($date['end']))->format('Y-m-d H:i:00');
+            \App\Models\Event::insert([
+                'date_start' => $dateStart,
+                'date_end' => $dateEnd,
                 'name' => $request->get('name'),
                 'class' => $request->get('class'),
                 'cabinet_id' => $request->get('cabinet_id'),
-                'group_id' => $request->get('group_id'),
+                'group_id' => $groupId
             ]);
+
+            $eventId = \App\Models\Event::orderBy('id', 'desc')->first()->id;
+            $users = \App\Models\Student::where('group_id', $groupId)->get();
+            $subscribeIds = [];
+            foreach($users as $user){
+                $subscribes = $user->subscribes;
+                $filtredSubscribes = $subscribes->filter(function ($item){
+                   return
+                       strtotime($item->date_end) > strtotime((new DateTime())->format('d.m.Y'))
+                       && strtotime($item->date_start) < strtotime((new DateTime())->format('d.m.Y'));
+                });
+
+                $subscribeIds[] = $filtredSubscribes->first()->id;
+            }
+
+            foreach($subscribeIds as $subscribeId){
+                \App\Models\Visit::insert([
+                    'date_visit' => $dateStart,
+                    'visited' => false,
+                    'subscribe_id' => $subscribeId,
+                    'event_id' => $eventId,
+                ]);
+            }
         }
         return true;
     }
@@ -46,6 +72,23 @@ class Event
     public function get(int $eventId): array
     {
         $event = \App\Models\Event::find($eventId);
+        $visits = \App\Models\Visit::where('event_id', $eventId)->get();
+
+        $visitList = [];
+
+        foreach ($visits as $visit){
+            $subscribe = \App\Models\SubscribeStudent::where('subscribe_id', $visit->subscribe_id)->first();
+            $user = \App\Models\Student::find($subscribe->student_id);
+
+            $visitList[] = [
+                'id' => $visit->id,
+                'subscribe_id' => $visit->subscribe_id,
+                'visited' => $visit->visited > 0,
+                'userId' => $user->id,
+                'userName' => $user->name,
+            ];
+        }
+
         return [
             'id' => $event->id,
             'name' => $event->name,
@@ -55,6 +98,7 @@ class Event
             'cabinetName' => $event->cabinet->name,
             'groupId' => $event->group_id,
             'groupName' => $event->group->name,
+            'visits' => $visitList
         ];
     }
 
