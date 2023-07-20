@@ -64,8 +64,28 @@ class User
     {
         $subscribeList = [];
 
+        $visits = [];
+        $visitCount = 0;
+
         $subscribes = Student::find($userId)->subscribes;
         foreach($subscribes as $subscribe){
+
+            $visitList = DB::table('visits')
+                ->where('subscribe_id', $subscribe->id)
+                ->get();
+
+            foreach($visitList as $visit){
+                $visits[] = [
+                  'id' => $visit->id,
+                  'date_visit' => $visit->date_visit,
+                  'visited' => $visit->visited > 0,
+                  'event_id' => $visit->event_id
+                ];
+
+                if($visit->visited > 0)
+                    $visitCount++;
+            }
+
             $subscribeList[] = [
                 'id' => $subscribe->id,
                 'name' => $subscribe->name,
@@ -74,7 +94,8 @@ class User
                 'date_start' => $subscribe->date_start,
                 'date_end' => $subscribe->date_end,
                 'payment' => $subscribe->payment,
-                'visits' => []
+                'visits' => $visits,
+                'visit_count' => $visitCount,
             ];
         }
         return $subscribeList;

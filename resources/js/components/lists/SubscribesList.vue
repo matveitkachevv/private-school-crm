@@ -20,12 +20,6 @@
                     >
                         Удалить
                     </v-btn>
-                    <v-btn
-                        class="mx-4"
-                    @click="pay(subscribe.id)"
-                    >
-                        Оплачено
-                    </v-btn>
                 </v-row>
             </v-col>
             <v-col
@@ -56,7 +50,7 @@
                 class="subscribe-row-data py-0"
                 cols="12"
             >
-                Осталось посещений: <b>{{ (Number(subscribe.count) - (subscribe.visits.length ?? 0)) }}</b>
+                Осталось посещений: <b>{{ (Number(subscribe.count) - (subscribe.visit_count)) }}</b>
             </v-col>
             <v-col
                 cols="12"
@@ -65,10 +59,10 @@
                 <h5>Посещения</h5>
                 <v-row v-for="visit in subscribe.visits">
                     <v-col>
-                        Дата занятия
+                        Дата занятия: {{ convertToDdMmYyyy(visit.date_visit) }}
                     </v-col>
                     <v-col>
-                        Посетил занятие
+                        Посетил занятие: <b>{{ visit.visited ? 'Посетил' : 'Не посетил' }}</b>
                     </v-col>
                 </v-row>
             </v-col>
