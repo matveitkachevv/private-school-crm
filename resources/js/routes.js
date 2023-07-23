@@ -5,6 +5,8 @@ import EventDetail from "./components/detail/EventDetail.vue";
 import GroupDetail from "./components/detail/GroupDetail.vue";
 import UserDetail from "./components/detail/UserDetail.vue";
 import Cabinets from "./components/Cabinets.vue";
+import Notes from './components/Notes.vue'
+import NoteDetail from "./components/detail/NoteDetail.vue";
 
 
 export default [
@@ -14,9 +16,19 @@ export default [
         component: Schedule
     },
     {
+        path: '/event/:id/detail/',
+        name: 'EventDetail',
+        component: EventDetail
+    },
+    {
         path: '/groups/',
         name: 'Groups',
         component: Groups
+    },
+    {
+        path: '/group/:id/',
+        name: 'GroupDetail',
+        component: GroupDetail
     },
     {
         path: '/cabinets/',
@@ -24,19 +36,19 @@ export default [
         component: Cabinets
     },
     {
+        path: '/notes/',
+        name: 'Notes',
+        component: Notes
+    },
+    {
+        path: '/note/:id/',
+        name: 'NoteDetail',
+        component: NoteDetail
+    },
+    {
         path: '/users/',
         name: 'Users',
         component: Users
-    },
-    {
-        path: '/event/:id/detail/',
-        name: 'EventDetail',
-        component: EventDetail
-    },
-    {
-        path: '/group/:id/',
-        name: 'GroupDetail',
-        component: GroupDetail
     },
     {
         path: '/user/:id/',

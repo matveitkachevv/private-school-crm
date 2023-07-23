@@ -7,6 +7,7 @@ use App\Http\Controllers\User;
 use App\Http\Controllers\Cabinet;
 use App\Http\Controllers\Subscribe;
 use App\Http\Controllers\Visit;
+use App\Http\Controllers\Note;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,3 +53,7 @@ Route::post('/subscribe/', [Subscribe::class, 'create']);
 Route::put('/subscribe/{subscribeId}/payment/', [Subscribe::class, 'paymentChange'])->where('subscribeId', '[0-9]+');
 Route::delete('/subscribe/{subscribeId}', [Subscribe::class, 'delete'])->where('subscribeId', '[0-9]+');
 
+Route::post('/note/', [Note::class, 'create']);
+Route::get('/notes/', [Note::class, 'getAll']);
+Route::get('/note/{noteId}', [Note::class, 'get'])->where('noteId', '[0-9]+');
+Route::delete('/note/{noteId}', [Note::class, 'delete'])->where('noteId', '[0-9]+');

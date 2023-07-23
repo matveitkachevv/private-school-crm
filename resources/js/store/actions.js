@@ -20,4 +20,14 @@ export default {
     createEvent (context) {
         context.commit('createEvent')
     },
+    getNotes (context) {
+        axios({
+            method: 'get',
+            url: '/notes/'
+        }).then(response => {
+            if(response.status === 200){
+                context.commit('setNotes', response.data)
+            }
+        });
+    },
 }

@@ -38,7 +38,7 @@ export default {
     },
     data() {
         return {
-            viewCal: ''
+            viewCal: 'day'
         }
     },
     mounted() {

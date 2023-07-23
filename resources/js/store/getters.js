@@ -17,4 +17,7 @@ export default {
     getNewEvent (state) {
         return state.newEvent;
     },
+    getNotes (state) {
+        return state.notes;
+    },
 }

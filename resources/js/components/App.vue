@@ -66,8 +66,13 @@ export default {
 }
 
 .vuecal__event.group{
-    background: green;
-    color: white;
+    background: #283593;
+    color: #fff;
+}
+
+.vuecal__event.note{
+    background: #FBC02D;
+    color: #000;
 }
 
 .split-label, .vuecal__no-event{

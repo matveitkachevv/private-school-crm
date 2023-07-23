@@ -3,6 +3,7 @@ export default {
     groups: [],
     students: [],
     cabinets: [],
+    notes: [],
     newEvent: {
         name: '',
         class: 'lesson',
@@ -16,5 +17,6 @@ export default {
         ['mdi-account-group', 'Группы', '/groups/'],
         ['mdi-account', 'Ученики', '/users/'],
         ['mdi-door', 'Кабинеты', '/cabinets/'],
+        ['mdi-note-outline', 'Заметки', '/notes/'],
     ],
 }

@@ -43,6 +43,9 @@ export default {
     clearNewEvent (state) {
         state.newEvent = {};
     },
+    setNotes (state, notes) {
+        state.notes = notes;
+    },
     createEvent (state) {
         axios({
             method: 'post',
