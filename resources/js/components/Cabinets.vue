@@ -15,8 +15,7 @@
                 <v-card>
                     <v-list>
                         <v-list-item
-                            v-for="item in $store.getters.getCabinets"
-                            @click="deleteCabinet(item.id)">
+                            v-for="item in $store.getters.getCabinets">
                             {{ item.label }}
                         </v-list-item>
                     </v-list>
@@ -35,18 +34,5 @@ export default {
     mounted() {
         this.$store.dispatch('getCabinets');
     },
-    methods: {
-        deleteCabinet(cabinetId){
-            const __this = this;
-            axios({
-                method: 'delete',
-                url: '/cabinet/' + cabinetId
-            }).then(response => {
-                if(response.status === 200 && response.data > 0){
-                    __this.$store.dispatch('getCabinets');
-                }
-            });
-        }
-    }
 }
 </script>
