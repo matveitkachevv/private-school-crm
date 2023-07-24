@@ -13,7 +13,6 @@ class User
          return DB::table('students')->insert([
            'name' => $request->get('name'),
            'phone' => $request->get('phone'),
-           'email' => $request->get('email'),
            'comment' => $request->get('comment'),
            'group_id' => $request->get('group_id')
         ]);
@@ -45,7 +44,6 @@ class User
             'id' => $student->id,
             'name' => $student->name,
             'phone' => $student->phone,
-            'email' => $student->email,
             'comment' => $student->comment,
             'groupId' => $student->group->id ?? 0,
             'groupName' => $student->group->name ?? '',

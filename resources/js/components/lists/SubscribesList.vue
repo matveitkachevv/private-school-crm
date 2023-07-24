@@ -123,7 +123,7 @@ export default {
 
             const year = dateObject.getFullYear();
             const month = ('0'+(Number(dateObject.getMonth()) + 1)).slice(-2);
-            const day = ('0'+(Number(dateObject.getDate()) + 1)).slice(-2);
+            const day = ('0'+(Number(dateObject.getDate()))).slice(-2);
 
             return day + '.' + month + '.' + year;
         },

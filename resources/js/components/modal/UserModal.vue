@@ -41,17 +41,6 @@
                         <v-row>
                             <v-col
                             >
-                                <v-text-field
-                                    label="E-mail*"
-                                    v-model="student.email"
-                                    :rules="emailRules"
-                                    required
-                                ></v-text-field>
-                            </v-col>
-                        </v-row>
-                        <v-row>
-                            <v-col
-                            >
                                 <v-textarea
                                     label="Комментарий"
                                     v-model="student.comment"
@@ -104,17 +93,10 @@ export default {
         student: {
             name: '',
             phone: '',
-            email: '',
             comment: '',
             group: 0
         },
         groups: [],
-        emailRules: [
-            value => {
-                if (/.+@.+\..+/.test(value)) return true
-                return 'Не верный формат Эл. почты'
-            },
-        ],
         phoneRules: [
             value => {
                 if (value?.length > 10 && /[0-9-]+/.test(value)) return true
@@ -136,7 +118,6 @@ export default {
                data: {
                    name: this.student.name,
                    phone: this.student.phone,
-                   email: this.student.email,
                    comment: this.student.comment,
                    group_id: this.student.group
                }

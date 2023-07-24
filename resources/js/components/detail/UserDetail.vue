@@ -49,13 +49,6 @@
         <v-row>
             <v-col
                 cols="12">
-                <h4>Почта:</h4>
-                {{ user.email }}
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col
-                cols="12">
                 <h4>Комментарий:</h4>
                 {{ user.comment }}
             </v-col>
