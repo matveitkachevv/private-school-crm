@@ -10,6 +10,11 @@
                         <span class="text-h5">Создать новое занятие</span>
                     </v-card-title>
                     <v-row>
+                        <v-col
+                        v-if="error.length > 0"
+                        cols="12">
+                            <ErrorMessage :message="error"/>
+                        </v-col>
                         <v-col>
                             <v-autocomplete
                                 :items="$store.getters.getGroups"
@@ -33,7 +38,7 @@
                         >
                             Дата окончания занятия
                             <v-spacer></v-spacer>
-                            <input type="datetime-local" v-model="dateEnd">
+                            <input type="datetime-local" :min="dateStart" v-model="dateEnd">
                         </v-col>
                     </v-row>
                 </v-container>
@@ -60,22 +65,56 @@
 </template>
 
 <script>
-
+import ErrorMessage from './Error.vue';
 export default {
     name: 'ScheduleModalComponent',
+    components: {
+        ErrorMessage
+    },
     data () {
         return {
             dialog: false,
             group_id: 0,
+            duration: 2000,
             dateStart: '',
             dateEnd: '',
+            error: '',
         }
     },
     mounted(){
         this.$store.dispatch('getGroups');
     },
+    watch: {
+        error(newError){
+            const timer = setTimeout(() => {
+                this.error = '';
+            }, this.duration);
+            if(newError === '' && !!timer)
+                clearTimeout(timer);
+        }
+    },
     methods: {
         createEvent(){
+            if(new Date(this.dateStart).getTime() >= new Date(this.dateEnd).getTime()){
+                this.error = 'Дата начала не может быть позже даты окончания занятия';
+                return false;
+            }
+
+            if(this.group_id <= 0){
+                this.error = 'Не выбрана группа';
+                return false;
+            }
+
+            if(this.dateStart.length <= 0){
+                this.error = 'На назначена дата начала занятия';
+                return false;
+            }
+
+            if(this.dateEnd.length <= 0){
+                this.error = 'На назначена дата окончания занятия';
+                return false;
+            }
+
             const groupData = {
                 key: 'group_id',
                 value: this.group_id

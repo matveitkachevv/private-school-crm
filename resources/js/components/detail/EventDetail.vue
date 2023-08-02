@@ -81,10 +81,8 @@
                     method: 'get',
                     url: '/event/' + __this.$route.params.id
                 }).then(response => {
-                    if(response.status === 200){
-                        console.log(response.data);
+                    if(response.status === 200)
                         __this.event = response.data;
-                    }
                 });
             },
             dateConvert(dateString){
