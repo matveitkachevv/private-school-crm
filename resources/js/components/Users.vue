@@ -8,6 +8,7 @@
                 <user-modal/>
             </v-col>
         </v-row>
+        <Filter @filter="filterUsers"/>
         <v-row>
             <v-col>
                 <h2>Список учеников:</h2>
@@ -15,7 +16,7 @@
                 <v-card>
                     <v-list>
                         <v-list-item
-                        v-for="student in $store.getters.getStudents"
+                        v-for="student in students"
                         @click="showUserDetail(student.id)">
                             {{ student.name }}
                         </v-list-item>
@@ -28,16 +29,35 @@
 
 <script>
 import UserModal from "./modal/UserModal.vue";
+import Filter from './Filter.vue';
 
 export default {
     name: 'UsersComponent',
-    components: {UserModal},
+    components: {
+        UserModal,
+        Filter
+    },
+    data(){
+        return {
+            students: []
+        }
+    },
     mounted(){
         this.$store.dispatch('getStudents');
+        this.students = this.$store.getters.getStudents;
     },
     methods: {
         showUserDetail(userId){
             this.$router.push('/user/' + userId + '/');
+        },
+        filterUsers(filterString){
+            if(filterString === '')
+                this.students = this.$store.getters.getStudents;
+            else {
+                this.students = this.students.filter(value => {
+                    return value.name.toLowerCase().indexOf(filterString.toLowerCase()) >= 0;
+                });
+            }
         }
     }
 }

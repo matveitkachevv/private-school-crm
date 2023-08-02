@@ -8,6 +8,7 @@
                <group-modal/>
            </v-col>
         </v-row>
+        <Filter @filter="filterGroups"/>
         <v-row>
             <v-col>
                 <h2>Список групп:</h2>
@@ -15,7 +16,7 @@
                 <v-card>
                     <v-list>
                         <v-list-item
-                        v-for="item in $store.getters.getGroups"
+                        v-for="item in groups"
                         @click="showDetailGroup(item.id)">
                             {{ item.name }}
                         </v-list-item>
@@ -28,16 +29,35 @@
 
 <script>
 import GroupModal from "./modal/GroupModal.vue";
+import Filter from './Filter.vue';
 
 export default {
     name: 'GroupsComponent',
-    components: {GroupModal},
+    components: {
+        GroupModal,
+        Filter
+    },
+    data(){
+        return {
+           groups: [],
+        }
+    },
     mounted() {
         this.$store.dispatch('getGroups');
+        this.groups = this.$store.getters.getGroups;
     },
     methods: {
         showDetailGroup(groupId){
             this.$router.push('/group/' + groupId + '/');
+        },
+        filterGroups(filterString){
+            if(filterString === '')
+                this.groups = this.$store.getters.getGroups;
+            else {
+                this.groups = this.groups.filter(value => {
+                    return value.name.toLowerCase().indexOf(filterString.toLowerCase()) >= 0;
+                });
+            }
         }
     }
 }
