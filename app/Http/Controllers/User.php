@@ -38,8 +38,6 @@ class User
     public function get(int $userId): array
     {
         $student = Student::find($userId);
-        $subscribes = [];
-
         return [
             'id' => $student->id,
             'name' => $student->name,
@@ -47,7 +45,7 @@ class User
             'comment' => $student->comment,
             'groupId' => $student->group->id ?? 0,
             'groupName' => $student->group->name ?? '',
-            'subscribes' => $subscribes
+            'subscribes' => []
         ];
     }
 
@@ -61,12 +59,12 @@ class User
     public function getSubscribes(int $userId): array
     {
         $subscribeList = [];
-
-        $visits = [];
         $visitCount = 0;
 
         $subscribes = Student::find($userId)->subscribes;
         foreach($subscribes as $subscribe){
+            $visits = [];
+            $visitCount = 0;
 
             $visitList = DB::table('visits')
                 ->where('subscribe_id', $subscribe->id)

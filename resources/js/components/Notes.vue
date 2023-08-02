@@ -8,7 +8,7 @@
             <vue-cal
                 locale="ru"
                 :time-from="7 * 60"
-                :time-to="22 * 60"
+                :time-to="24 * 60"
                 :selected-date="currentDate"
                 v-model:active-view="viewCal"
                 class="vuecal--green-theme"

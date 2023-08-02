@@ -56,7 +56,7 @@
                 cols="12"
                 v-if="subscribe.visits.length > 0"
             >
-                <h5>Посещения</h5>
+                <h3>Посещения</h3>
                 <v-row v-for="visit in subscribe.visits">
                     <v-col>
                         Дата занятия: {{ convertToDdMmYyyy(visit.date_visit) }}
