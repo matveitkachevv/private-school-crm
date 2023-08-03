@@ -53,7 +53,9 @@ class Event
                             strtotime($item->date_end) > strtotime((new DateTime())->format('d.m.Y'))
                             && strtotime($item->date_start) < strtotime((new DateTime())->format('d.m.Y'));
                     });
-                    $subscribeIds[] = $filtredSubscribes->first()->id;
+
+                    if($filtredSubscribe = $filtredSubscribes->first())
+                        $subscribeIds[] = $filtredSubscribe->id;
                 }
 
                 foreach($subscribeIds as $subscribeId){
