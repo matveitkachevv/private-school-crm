@@ -36,16 +36,15 @@
             </v-col>
         </v-row>
         <h3 class="mt-4" v-if="isVisits">Студенты</h3>
-        <v-row v-if="isVisits" v-for="visit in event.visits">
-            <v-col
-            cols="3">{{ visit.userName }}</v-col>
-            <v-col>
+        <v-row
+            v-if="isVisits"
+            class="my-4 mx-4"
+            v-for="visit in event.visits">
                 <v-checkbox
                     v-model="visit.visited"
                     @click="changeVisited(visit.id)"
-                    label="Пришел">
+                    :label="visit.userName + ' посетил'">
                 </v-checkbox>
-            </v-col>
         </v-row>
     </v-container>
 </template>
