@@ -74,7 +74,7 @@ export default {
     data () {
         return {
             dialog: false,
-            group_id: 0,
+            group_id: null,
             duration: 2000,
             dateStart: '',
             dateEnd: '',

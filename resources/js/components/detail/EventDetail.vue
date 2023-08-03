@@ -32,17 +32,13 @@
         </v-row>
         <v-row>
             <v-col>
-                <h3>Кабинет</h3>
+                <span>Кабинет</span> - {{ event.cabinetName }}
             </v-col>
         </v-row>
-        <v-row>
-            <v-col>
-                {{ event.cabinetName }}
-            </v-col>
-        </v-row>
-        <h3>Студенты</h3>
-        <v-row v-for="visit in event.visits">
-            <v-col>{{ visit.userName }}</v-col>
+        <h3 class="mt-4" v-if="isVisits">Студенты</h3>
+        <v-row v-if="isVisits" v-for="visit in event.visits">
+            <v-col
+            cols="3">{{ visit.userName }}</v-col>
             <v-col>
                 <v-checkbox
                     v-model="visit.visited"
@@ -71,6 +67,9 @@
             },
             end: function(){
                 return this.dateConvert(this.event.end);
+            },
+            isVisits: function() {
+                return !!this.event.visits && this.event.visits.length > 0;
             }
         },
         methods: {

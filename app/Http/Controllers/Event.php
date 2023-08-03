@@ -34,7 +34,7 @@ class Event
             $groupId = $request->get('group_id');
             $dateStart = (new DateTime($date['start']))->format('Y-m-d H:i:00');
             $dateEnd = (new DateTime($date['end']))->format('Y-m-d H:i:00');
-            \App\Models\Event::insert([
+            $newEvent = \App\Models\Event::insert([
                 'date_start' => $dateStart,
                 'date_end' => $dateEnd,
                 'name' => $request->get('name'),
@@ -42,28 +42,28 @@ class Event
                 'cabinet_id' => $request->get('cabinet_id'),
                 'group_id' => $groupId
             ]);
+            if($newEvent){
+                $eventId = \App\Models\Event::orderBy('id', 'desc')->first()->id;
+                $users = \App\Models\Student::where('group_id', $groupId)->get();
+                $subscribeIds = [];
+                foreach($users as $user){
+                    $subscribes = $user->subscribes;
+                    $filtredSubscribes = $subscribes->filter(function ($item){
+                        return
+                            strtotime($item->date_end) > strtotime((new DateTime())->format('d.m.Y'))
+                            && strtotime($item->date_start) < strtotime((new DateTime())->format('d.m.Y'));
+                    });
+                    $subscribeIds[] = $filtredSubscribes->first()->id;
+                }
 
-            $eventId = \App\Models\Event::orderBy('id', 'desc')->first()->id;
-            $users = \App\Models\Student::where('group_id', $groupId)->get();
-            $subscribeIds = [];
-            foreach($users as $user){
-                $subscribes = $user->subscribes;
-                $filtredSubscribes = $subscribes->filter(function ($item){
-                   return
-                       strtotime($item->date_end) > strtotime((new DateTime())->format('d.m.Y'))
-                       && strtotime($item->date_start) < strtotime((new DateTime())->format('d.m.Y'));
-                });
-
-                $subscribeIds[] = $filtredSubscribes->first()->id;
-            }
-
-            foreach($subscribeIds as $subscribeId){
-                \App\Models\Visit::insert([
-                    'date_visit' => $dateStart,
-                    'visited' => false,
-                    'subscribe_id' => $subscribeId,
-                    'event_id' => $eventId,
-                ]);
+                foreach($subscribeIds as $subscribeId){
+                    \App\Models\Visit::insert([
+                        'date_visit' => $dateStart,
+                        'visited' => false,
+                        'subscribe_id' => $subscribeId,
+                        'event_id' => $eventId,
+                    ]);
+                }
             }
         }
         return true;
