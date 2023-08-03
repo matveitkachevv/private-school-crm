@@ -24,12 +24,12 @@ return new class extends Migration
             // cabinets
             $table->unsignedBigInteger('cabinet_id');
             $table->index('cabinet_id', 'event_cabinet_idx');
-            $table->foreign('cabinet_id', 'event_cabinet_fk')->on('cabinets')->references('id');
+            $table->foreign('cabinet_id', 'event_cabinet_fk')->on('cabinets')->references('id')->cascadeOnUpdate()->cascadeOnDelete();
 
             // groups
             $table->unsignedBigInteger('group_id');
             $table->index('group_id', 'event_group_idx');
-            $table->foreign('group_id', 'event_group_fk')->on('groups')->references('id');
+            $table->foreign('group_id', 'event_group_fk')->on('groups')->references('id')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

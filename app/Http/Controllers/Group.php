@@ -21,6 +21,14 @@ class Group
         return $groups;
     }
 
+    public function update(int $groupId, Request $request): bool
+    {
+        $groupName = $request->get('groupName');
+        return \App\Models\Group::find($groupId)->update([
+           'name' => $groupName
+        ]);
+    }
+
     public function create(Request $request): int
     {
         DB::table('groups')->insert([

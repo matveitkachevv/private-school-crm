@@ -8,7 +8,10 @@
                 <user-modal/>
             </v-col>
         </v-row>
-        <Filter @filter="filterUsers"/>
+        <Filter
+            @filter="filterUsers"
+            ref="filter"
+        />
         <v-row>
             <v-col>
                 <h2>Список учеников:</h2>
@@ -58,6 +61,17 @@ export default {
                     return value.name.toLowerCase().indexOf(filterString.toLowerCase()) >= 0;
                 });
             }
+        }
+    },
+    watch: {
+        storeUsers(students){
+            this.students = students;
+            this.$refs.filter.filter = '';
+        }
+    },
+    computed: {
+        storeUsers: function (){
+            return this.$store.state.students;
         }
     }
 }

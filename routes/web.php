@@ -31,6 +31,7 @@ Route::delete('/event/{eventId}', [Event::class, 'delete'])->where('eventId', '[
 
 Route::get('/groups/', [Group::class, 'getAll']);
 Route::post('/group/', [Group::class, 'create']);
+Route::put('/group/{groupId}/', [Group::class, 'update'])->where('groupId', '[0-9]+');
 Route::get('/group/{groupId}/', [Group::class, 'get'])->where('groupId', '[0-9]+');
 Route::delete('/group/{groupId}', [Group::class, 'delete'])->where('groupId', '[0-9]+');
 

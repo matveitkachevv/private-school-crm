@@ -83,19 +83,20 @@ export default {
     },
     methods: {
         createGroup(){
+            const __this = this;
             axios({
                method: 'POST',
                url: '/group/',
                data: {
-                   groupName: this.group.name,
-                   students: this.group.students
+                   groupName: __this.group.name,
+                   students: __this.group.students
                }
             }).then(response => {
                 if(response.status === 200 && response.data > 0){
-                    this.$store.dispatch('getGroups');
+                    __this.$store.dispatch('getGroups');
                 }
             });
-            this.dialog = false
+            __this.dialog = false
         }
     }
 }

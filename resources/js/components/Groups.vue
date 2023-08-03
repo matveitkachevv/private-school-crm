@@ -8,7 +8,10 @@
                <group-modal/>
            </v-col>
         </v-row>
-        <Filter @filter="filterGroups"/>
+        <Filter
+            @filter="filterGroups"
+            ref="filter"
+        />
         <v-row>
             <v-col>
                 <h2>Список групп:</h2>
@@ -58,6 +61,17 @@ export default {
                     return value.name.toLowerCase().indexOf(filterString.toLowerCase()) >= 0;
                 });
             }
+        }
+    },
+    watch: {
+        storeGroups(groups) {
+            this.groups = groups;
+            this.$refs.filter.filter = '';
+        }
+    },
+    computed: {
+        storeGroups: function(){
+            return this.$store.state.groups;
         }
     }
 }

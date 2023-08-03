@@ -53,7 +53,10 @@
                 {{ user.comment }}
             </v-col>
         </v-row>
-        <subscribes-list-component :user="user.id"/>
+        <subscribes-list-component
+            :user="user.id"
+            ref="subscribeList"
+        />
     </v-container>
 </template>
 
@@ -79,7 +82,7 @@ import SubscribesListComponent from "../lists/SubscribesList.vue";
         methods: {
             onRestart(isRestart){
                 if(isRestart){
-                    this.$router.push('/user/' + this.user.id + '/');
+                    this.$refs.subscribeList.getSubscribes();
                 }
             },
             showGroupDetail(groupId){
