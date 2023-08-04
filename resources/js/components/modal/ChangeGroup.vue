@@ -20,7 +20,7 @@
                                 <v-autocomplete
                                     :items="groups"
                                     v-model="group"
-                                    label="Группа*"
+                                    label="Группа"
                                     item-title="name"
                                     item-value="id"
                                 ></v-autocomplete>
@@ -58,7 +58,7 @@ export default {
     ],
     data: () => ({
         dialog: false,
-        group: 0
+        group: null
     }),
     mounted(){
         this.$store.dispatch('getGroups');

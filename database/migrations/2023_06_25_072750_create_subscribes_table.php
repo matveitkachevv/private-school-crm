@@ -19,9 +19,13 @@ return new class extends Migration
             $table->string('name');
             $table->integer('price');
             $table->integer('count');
-            $table->date('date_start');
             $table->date('date_end');
             $table->boolean('payment')->default(true);
+
+            // groups
+            $table->unsignedBigInteger('group_id')->nullable();
+            $table->index('group_id', 'subscribe_group_idx');
+            $table->foreign('group_id', 'subscribe_group_fk')->on('subscribes')->references('id')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

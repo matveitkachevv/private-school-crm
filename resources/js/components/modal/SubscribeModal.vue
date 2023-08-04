@@ -43,12 +43,14 @@
                                     required
                                 ></v-text-field>
                             </v-col>
-                            <v-col
-                                cols="12"
-                            >
-                                <label>Начало действия абонемента</label>
-                                <br>
-                                <input type="date" v-model="subscribe.dateStart">
+                            <v-col>
+                                <v-autocomplete
+                                    :items="$store.getters.getGroups"
+                                    v-model="subscribe.group_id"
+                                    label="Группа"
+                                    item-title="name"
+                                    item-value="id"
+                                ></v-autocomplete>
                             </v-col>
                             <v-col
                                 cols="12"
@@ -94,11 +96,12 @@ export default {
             name: '',
             cost: 0,
             count: 4,
-            dateStart: '',
             dateEnd: '',
+            group_id: null,
         }
     }),
     mounted(){
+        this.$store.dispatch('getGroups');
     },
     methods: {
         send(){

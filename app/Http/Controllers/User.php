@@ -18,6 +18,20 @@ class User
         ]);
     }
 
+    public function update(int $userId, Request $request): bool
+    {
+        $user = $request->get('user');
+        $userName = $user['name'];
+        $userPhone = $user['phone'];
+        $userComment = $user['comment'];
+
+        return \App\Models\Student::find($userId)->update([
+            'name' => $userName,
+            'phone' => $userPhone,
+            'comment' => $userComment,
+        ]);
+    }
+
     public function getAll(): array
     {
         $students = [];
@@ -82,12 +96,14 @@ class User
                     $visitCount++;
             }
 
+            $groupName = \App\Models\Group::find($subscribe->group_id);
+
             $subscribeList[] = [
                 'id' => $subscribe->id,
                 'name' => $subscribe->name,
                 'price' => $subscribe->price,
                 'count' => $subscribe->count,
-                'date_start' => $subscribe->date_start,
+                'groupName' => $groupName->name,
                 'date_end' => $subscribe->date_end,
                 'payment' => $subscribe->payment,
                 'visits' => $visits,

@@ -30,7 +30,7 @@
                             <v-col
                             >
                                 <v-text-field
-                                    label="Номер телефона*"
+                                    label="Номер телефона"
                                     v-model="student.phone"
                                     :counter="11"
                                     :rules="phoneRules"
@@ -53,14 +53,14 @@
                                 <v-autocomplete
                                     :items="groups"
                                     v-model="student.group"
-                                    label="Группа*"
+                                    label="Группа"
                                     item-title="name"
                                     item-value="id"
                                 ></v-autocomplete>
                             </v-col>
                         </v-row>
                     </v-container>
-                    <small>*Обязательные поля</small>
+                    <small>* - Обязательные поля</small>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
@@ -94,7 +94,7 @@ export default {
             name: '',
             phone: '',
             comment: '',
-            group: 0
+            group: null
         },
         groups: [],
         phoneRules: [

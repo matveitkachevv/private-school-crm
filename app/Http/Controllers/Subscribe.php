@@ -15,8 +15,8 @@ class Subscribe
             'name' => $subscribe['name'],
             'price' => $subscribe['cost'],
             'count' => $subscribe['count'],
-            'date_start' => $subscribe['dateStart'],
             'date_end' => $subscribe['dateEnd'],
+            'group_id' => $subscribe['group_id'],
             'payment' => true,
         ]);
 

@@ -1,7 +1,27 @@
 <template>
     <v-container>
-        <v-row>
-            <h2>{{ user.name }}</h2>
+        <v-row
+            justify="start"
+            align="center">
+            <h2 v-if="!edit">{{ user.name }}</h2>
+            <div
+                v-if="!edit"
+                role="button"
+                class="mx-4 round-icon">
+                <v-icon
+                    @click="editUser"
+                    icon="mdi-pencil-outline"
+                    size="small">
+                </v-icon>
+            </div>
+            <v-col
+                v-if="edit"
+                cols="3">
+                <v-text-field
+                    label="ФИО"
+                    v-model="editStudent.name"
+                ></v-text-field>
+            </v-col>
         </v-row>
         <v-row
             align="end"
@@ -41,17 +61,48 @@
         </v-row>
         <v-row>
             <v-col
-                cols="12">
+                v-if="!edit"
+                cols="12"
+            >
                 <h4>Номер телефона:</h4>
                 {{ user.phone }}
+            </v-col>
+            <v-col
+                cols="3"
+                v-else>
+                <v-text-field
+                    label="Номер телефона"
+                    v-model="editStudent.phone"
+                ></v-text-field>
             </v-col>
         </v-row>
         <v-row>
             <v-col
+                v-if="!edit"
                 cols="12">
                 <h4>Комментарий:</h4>
                 {{ user.comment }}
             </v-col>
+            <v-col
+                cols="3"
+                v-else
+            >
+                <v-text-field
+                    label="Комментарий"
+                    v-model="editStudent.comment"
+                ></v-text-field>
+            </v-col>
+        </v-row>
+        <v-row v-if="edit">
+            <v-btn
+                @click="editSave">
+                Сохранить
+            </v-btn>
+            <v-btn
+                class="mx-3"
+                @click="editCancel">
+                Отменить
+            </v-btn>
         </v-row>
         <subscribes-list-component
             :user="user.id"
@@ -73,13 +124,50 @@ import SubscribesListComponent from "../lists/SubscribesList.vue";
         },
         data() {
             return {
-                user: {}
+                user: {},
+                edit: false,
+                editStudent: {
+                    name: '',
+                    phone: '',
+                    comment: ''
+                }
             }
         },
         mounted() {
             this.getUserDetailInfo();
         },
         methods: {
+            editUser(){
+                this.editStudent.name = this.user.name;
+                this.editStudent.phone = this.user.phone;
+                this.editStudent.comment = this.user.comment;
+                this.edit = true;
+            },
+            editSave(){
+                if(this.editStudent.name === ''){
+                    this.editCancel();
+                    return false;
+                }
+
+                axios({
+                    method: 'put',
+                    url: '/user/' + this.user.id + '/',
+                    data: {
+                        user: this.editStudent
+                    }
+                }).then(response => {
+                    if(response.status === 200 && response.data > 0){
+                        this.getUserDetailInfo();
+                        this.edit = false;
+                    }
+                });
+            },
+            editCancel(){
+                this.editStudent.name = '';
+                this.editStudent.phone = '';
+                this.editStudent.comment = '';
+                this.edit = false;
+            },
             onRestart(isRestart){
                 if(isRestart){
                     this.$refs.subscribeList.getSubscribes();

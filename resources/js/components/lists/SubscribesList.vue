@@ -20,6 +20,12 @@
                     >
                         Удалить
                     </v-btn>
+                    <v-btn
+                        class="mx-3"
+                        @click="editSubscribe(subscribe.id)"
+                    >
+                        редактировать
+                    </v-btn>
                 </v-row>
             </v-col>
             <v-col
@@ -32,13 +38,19 @@
                 class="subscribe-row-data py-0"
                 cols="12"
             >
+                Группа: <b>{{ subscribe.groupName }}</b>
+            </v-col>
+            <v-col
+                class="subscribe-row-data py-0"
+                cols="12"
+            >
                 Сумма: <b>{{ subscribe.price }} руб.</b>
             </v-col>
             <v-col
                 class="subscribe-row-data py-0"
                 cols="12"
             >
-                Дата: <b>{{ convertToDdMmYyyy(subscribe.date_start) }} - {{ convertToDdMmYyyy(subscribe.date_end) }}</b>
+                Действует до: <b>{{ convertToDdMmYyyy(subscribe.date_end) }}</b>
             </v-col>
             <v-col
                 class="subscribe-row-data py-0"
@@ -106,6 +118,9 @@ export default {
                     __this.getSubscribes();
                 }
             });
+        },
+        editSubscribe(subscribeId){
+            console.log(subscribeId);
         },
         pay(subscribeId){
             const __this = this;
