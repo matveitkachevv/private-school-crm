@@ -16,16 +16,14 @@
                     align="center"
                 >
                     <v-btn
-                    @click="deleteSubscribe(subscribe.id)"
+                        class="mx-3"
+                        @click="deleteSubscribe(subscribe.id)"
                     >
                         Удалить
                     </v-btn>
-                    <v-btn
-                        class="mx-3"
-                        @click="editSubscribe(subscribe.id)"
-                    >
-                        редактировать
-                    </v-btn>
+                    <edit-subscribe
+                        @updateSubscribes="getSubscribes"
+                        :subscribe-id="subscribe.id"/>
                 </v-row>
             </v-col>
             <v-col
@@ -83,9 +81,13 @@
 </template>
 
 <script>
+import EditSubscribe from "../modal/EditSubscribe.vue";
 export default {
     name: 'SubscribesListComponent',
     props: ['user'],
+    components: {
+        EditSubscribe,
+    },
     data(){
         return {
             subscribes: []
@@ -120,7 +122,6 @@ export default {
             });
         },
         editSubscribe(subscribeId){
-            console.log(subscribeId);
         },
         pay(subscribeId){
             const __this = this;

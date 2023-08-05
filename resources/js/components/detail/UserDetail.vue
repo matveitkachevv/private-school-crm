@@ -44,14 +44,6 @@
                     :student="user.id"
                 />
             </v-col>
-            <v-col
-                cols="2"
-            >
-                <change-group
-                    :userid="user.id"
-                    @update-user="getUserDetailInfo()"
-                />
-            </v-col>
             <v-col>
                 <v-btn
                     @click="deleteUser(user.id)">
@@ -93,7 +85,9 @@
                 ></v-text-field>
             </v-col>
         </v-row>
-        <v-row v-if="edit">
+        <v-row
+            class="my-3"
+            v-if="edit">
             <v-btn
                 @click="editSave">
                 Сохранить
@@ -112,14 +106,12 @@
 </template>
 
 <script>
-import ChangeGroup from "../modal/ChangeGroup.vue";
 import SubscribeModalComponent from "../modal/SubscribeModal.vue";
 import SubscribesListComponent from "../lists/SubscribesList.vue";
     export default {
         name: 'UserDetailComponent',
         components: {
             SubscribesListComponent,
-            ChangeGroup,
             SubscribeModalComponent
         },
         data() {

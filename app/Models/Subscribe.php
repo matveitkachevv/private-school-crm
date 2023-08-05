@@ -10,7 +10,12 @@ class Subscribe extends Model
     use HasFactory;
 
     protected $fillable = [
-      'payment'
+      'payment',
+      'name',
+      'price',
+      'count',
+      'date_end',
+      'group_id',
     ];
 
     public function students()

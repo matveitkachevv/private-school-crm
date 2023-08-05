@@ -48,17 +48,6 @@
                                 ></v-textarea>
                             </v-col>
                         </v-row>
-                        <v-row>
-                            <v-col>
-                                <v-autocomplete
-                                    :items="groups"
-                                    v-model="student.group"
-                                    label="Группа"
-                                    item-title="name"
-                                    item-value="id"
-                                ></v-autocomplete>
-                            </v-col>
-                        </v-row>
                     </v-container>
                     <small>* - Обязательные поля</small>
                 </v-card-text>
@@ -92,11 +81,9 @@ export default {
         dialog: false,
         student: {
             name: '',
-            phone: '',
-            comment: '',
-            group: null
+            phone: null,
+            comment: null
         },
-        groups: [],
         phoneRules: [
             value => {
                 if (value?.length > 10 && /[0-9-]+/.test(value)) return true
@@ -105,10 +92,6 @@ export default {
         ],
     }),
     mounted(){
-        this.$store.dispatch('getGroups');
-        this.groups = this.$store.getters.getGroups;
-        if(!!this.groups[0])
-            this.student.group = this.groups[0].id;
     },
     methods: {
         send(){
@@ -119,7 +102,6 @@ export default {
                    name: this.student.name,
                    phone: this.student.phone,
                    comment: this.student.comment,
-                   group_id: this.student.group
                }
             }).then(response => {
                 if(response.status === 200 && response.data > 0){

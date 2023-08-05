@@ -44,13 +44,14 @@ class Event
             ]);
             if($newEvent){
                 $eventId = \App\Models\Event::orderBy('id', 'desc')->first()->id;
-                $users = \App\Models\Student::where('group_id', $groupId)->get();
+                $userIds = \App\Models\GroupStudent::where('group_id', $groupId)->get('student_id');
                 $subscribeIds = [];
-                foreach($users as $user){
+                foreach($userIds as $userId){
+                    $user = \App\Models\Student::find($userId->student_id);
                     $subscribes = $user->subscribes;
-                    $filtredSubscribes = $subscribes->filter(function ($item){
+                    $filtredSubscribes = $subscribes->filter(function ($item) use ($groupId){
                         return
-                            strtotime($item->date_end) > strtotime((new DateTime())->format('d.m.Y'))
+                            $groupId == $item->group_id
                             && strtotime($item->date_start) < strtotime((new DateTime())->format('d.m.Y'));
                     });
 

@@ -25,7 +25,7 @@ return new class extends Migration
             // groups
             $table->unsignedBigInteger('group_id')->nullable();
             $table->index('group_id', 'subscribe_group_idx');
-            $table->foreign('group_id', 'subscribe_group_fk')->on('subscribes')->references('id')->cascadeOnUpdate()->cascadeOnDelete();
+            $table->foreign('group_id', 'subscribe_group_fk')->on('groups')->references('id')->cascadeOnUpdate()->cascadeOnDelete();
         });
     }
 

@@ -35,12 +35,21 @@
                 </v-btn>
             </v-col>
         </v-row>
-        <v-row>
-            <v-col cols="6">
+        <v-row
+        justify="start"
+        align="baseline">
+            <v-col
+            cols="2">
                 <v-btn
                     @click="deleteGroup(group.id)">
                     Удалить группу
                 </v-btn>
+            </v-col>
+            <v-col>
+                <change-students-group
+                    @changed="getGroupData"
+                    :group-id="$route.params.id"
+                />
             </v-col>
         </v-row>
         <v-row>
@@ -63,71 +72,75 @@
 </template>
 
 <script>
-    export default {
-        name: 'GroupDetailComponent',
-        data() {
-            return {
-               group: {},
-                edit: false,
-                editGroupName: '',
+import ChangeStudentsGroup from "../modal/ChangeStudentsGroup.vue";
+export default {
+    name: 'GroupDetailComponent',
+    components: {
+        ChangeStudentsGroup
+    },
+    data() {
+        return {
+           group: {},
+            edit: false,
+            editGroupName: '',
+        }
+    },
+    mounted(){
+        this.getGroupData();
+    },
+    methods: {
+        editSave(){
+            const __this = this;
+            if(this.editGroupName === this.group.name || this.editGroupName === ''){
+                this.editCancel();
+                return false;
             }
-        },
-        mounted(){
-            this.getGroupData();
-        },
-        methods: {
-            editSave(){
-                const __this = this;
-                if(this.editGroupName === this.group.name || this.editGroupName === ''){
-                    this.editCancel();
-                    return false;
+            axios({
+               method: 'put',
+               url: '/group/' + this.$route.params.id + '/',
+               data: {
+                   groupName: this.editGroupName
+               }
+            }).then(response => {
+                if(response.status === 200 && response.data > 0){
+                    __this.getGroupData();
+                    __this.edit = false;
                 }
-                axios({
-                   method: 'put',
-                   url: '/group/' + this.$route.params.id + '/',
-                   data: {
-                       groupName: this.editGroupName
-                   }
-                }).then(response => {
-                    if(response.status === 200 && response.data > 0){
-                        __this.getGroupData();
-                        __this.edit = false;
-                    }
-                });
-            },
-            editGroup(){
-                this.editGroupName = this.group.name;
-                this.edit = true;
-            },
-            editCancel(){
-                this.editGroupName = '';
-                this.edit = false;
-            },
-            showStudentDetail(studentId){
-                this.$router.push('/user/' + studentId + '/');
-            },
-            deleteGroup(groupId){
-                const __this = this;
-                axios({
-                    method: 'delete',
-                    url: '/group/' + groupId
-                }).then(response => {
-                    if(response.status === 200 && response.data > 0){
-                        __this.$router.push('/groups/');
-                    }
-                });
-            },
-            getGroupData(){
-                const __this = this;
-                axios({
-                    method: 'get',
-                    url: '/group/' + __this.$route.params.id + '/'
-                }).then(response => {
-                    if(response.status === 200){
-                        __this.group = response.data;
-                    }
-                });
-            }
+            });
+        },
+        editGroup(){
+            this.editGroupName = this.group.name;
+            this.edit = true;
+        },
+        editCancel(){
+            this.editGroupName = '';
+            this.edit = false;
+        },
+        showStudentDetail(studentId){
+            this.$router.push('/user/' + studentId + '/');
+        },
+        deleteGroup(groupId){
+            const __this = this;
+            axios({
+                method: 'delete',
+                url: '/group/' + groupId
+            }).then(response => {
+                if(response.status === 200 && response.data > 0){
+                    __this.$router.push('/groups/');
+                }
+            });
+        },
+        getGroupData(){
+            const __this = this;
+            axios({
+                method: 'get',
+                url: '/group/' + __this.$route.params.id + '/'
+            }).then(response => {
+                if(response.status === 200){
+                    __this.group = response.data;
+                }
+            });
         }
     }
+}
 </script>

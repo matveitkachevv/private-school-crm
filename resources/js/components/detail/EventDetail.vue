@@ -38,7 +38,6 @@
         <h3 class="mt-4" v-if="isVisits">Студенты</h3>
         <v-row
             v-if="isVisits"
-            class="my-4 mx-4"
             v-for="visit in event.visits">
                 <v-checkbox
                     v-model="visit.visited"

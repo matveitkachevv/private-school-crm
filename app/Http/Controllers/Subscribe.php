@@ -10,22 +10,47 @@ class Subscribe
     public function create(Request $request)
     {
         $subscribe = $request->get('subscribe');
-
-        $subscribeId = DB::table('subscribes')->insertGetId([
+        $subscribeId = \App\Models\Subscribe::insertGetId([
             'name' => $subscribe['name'],
             'price' => $subscribe['cost'],
             'count' => $subscribe['count'],
             'date_end' => $subscribe['dateEnd'],
-            'group_id' => $subscribe['group_id'],
-            'payment' => true,
+            'group_id' => $subscribe['group_id']
         ]);
+        if($subscribeId > 0){
+            $studentId = $request->get('studentId');
+            \App\Models\SubscribeStudent::insert([
+                'subscribe_id' => $subscribeId,
+                'student_id' => $studentId,
+            ]);
+            return true;
+        }
+        return false;
+    }
 
-        $studentId = $request->get('studentId');
-        DB::table('subscribe_students')->insert([
-            'subscribe_id' => $subscribeId,
-            'student_id' => $studentId,
+    public function get(int $subscribeId): array
+    {
+        $subscribe = \App\Models\Subscribe::find($subscribeId);
+        return [
+            'id' => $subscribe->id,
+            'name' => $subscribe->name,
+            'price' => $subscribe->price,
+            'count' => $subscribe->count,
+            'date_end' => $subscribe->date_end,
+            'group_id' => $subscribe->group_id,
+        ];
+    }
+
+    public function update(int $subscribeId, Request $request): bool
+    {
+        $subscribe = $request->get('subscribe');
+        return \App\Models\Subscribe::find($subscribeId)->update([
+            'name' => $subscribe['name'],
+            'group_id' => $subscribe['group_id'],
+            'price' => $subscribe['price'],
+            'date_end' => $subscribe['date_end'],
+            'count' => $subscribe['count'],
         ]);
-        return true;
     }
 
     public function paymentChange($subscribeId): bool

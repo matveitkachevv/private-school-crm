@@ -28,19 +28,6 @@
                                     required
                                 ></v-text-field>
                             </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                            >
-                                <v-autocomplete
-                                    :items="$store.getters.getStudents"
-                                    v-model="group.students"
-                                    label="Ученики"
-                                    item-title="name"
-                                    item-value="id"
-                                    multiple
-                                ></v-autocomplete>
-                            </v-col>
                         </v-row>
                     </v-container>
                     <small>*Обязательные поля</small>
@@ -75,11 +62,9 @@ export default {
         dialog: false,
         group: {
             name: '',
-            students: []
         }
     }),
     mounted(){
-        this.$store.dispatch('getStudents');
     },
     methods: {
         createGroup(){
@@ -89,7 +74,6 @@ export default {
                url: '/group/',
                data: {
                    groupName: __this.group.name,
-                   students: __this.group.students
                }
             }).then(response => {
                 if(response.status === 200 && response.data > 0){

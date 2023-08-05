@@ -19,11 +19,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone')->nullable();
             $table->text('comment')->nullable();
-
-            // groups
-            $table->unsignedBigInteger('group_id')->nullable();
-            $table->index('group_id', 'student_group_idx');
-            $table->foreign('group_id', 'student_group_fk')->on('groups')->references('id')->cascadeOnUpdate()->nullOnDelete();
         });
     }
 

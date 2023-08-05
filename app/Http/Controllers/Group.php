@@ -21,6 +21,36 @@ class Group
         return $groups;
     }
 
+    public function setStudentsGroup(int $groupId, Request $request): bool
+    {
+        $students = $request->get('students') ?? [];
+        for($i = 0; $i < count($students); $i++){
+            $inGroup = \App\Models\GroupStudent::where([
+                'student_id' => $students[$i],
+                'group_id' => $groupId
+            ])->get('id');
+
+            if(count($inGroup) <= 0){
+                \App\Models\GroupStudent::insert([
+                    'student_id' => $students[$i],
+                    'group_id' => $groupId
+                ]);
+            }
+        }
+        return true;
+    }
+
+    public function studentsGroup(int $groupId): array
+    {
+        $studentIds = [];
+        $students = \App\Models\GroupStudent::where(['group_id' => $groupId])->get('student_id');
+
+        foreach($students as $student){
+            $studentIds[] = $student->student_id;
+        }
+        return $studentIds;
+    }
+
     public function update(int $groupId, Request $request): bool
     {
         $groupName = $request->get('groupName');
@@ -31,28 +61,19 @@ class Group
 
     public function create(Request $request): int
     {
-        DB::table('groups')->insert([
+        return \App\Models\Group::insertGetId([
             'name' => $request->get('groupName')
         ]);
-
-        $groupId = DB::table('groups')
-            ->where('name', $request->get('groupName'))
-            ->value('id');
-
-        foreach($request->get('students') as $student){
-            DB::table('students')->where('id', $student)->update([
-               'group_id' => $groupId
-            ]);
-        }
-        return $groupId;
     }
 
-    public function get($groupId): array
+    public function get(int $groupId): array
     {
         $group = \App\Models\Group::find($groupId);
         $students = [];
 
-        foreach($group->students as $student){
+        $groupStudentsIds = \App\Models\GroupStudent::where(['group_id' => $groupId])->get('student_id');
+        foreach($groupStudentsIds as $studentId){
+            $student = \App\Models\Student::find($studentId->student_id);
             $students[$student->id] = [
                 'id' => $student->id,
                 'name' => $student->name

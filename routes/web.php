@@ -33,6 +33,9 @@ Route::get('/groups/', [Group::class, 'getAll']);
 Route::post('/group/', [Group::class, 'create']);
 Route::put('/group/{groupId}/', [Group::class, 'update'])->where('groupId', '[0-9]+');
 Route::get('/group/{groupId}/', [Group::class, 'get'])->where('groupId', '[0-9]+');
+Route::get('/group/{groupId}/students/', [Group::class, 'studentsGroup'])->where('groupId', '[0-9]+');
+Route::get('/group/{groupId}/visits/', [Group::class, 'visits'])->where('groupId', '[0-9]+');
+Route::post('/group/{groupId}/students/', [Group::class, 'setStudentsGroup'])->where('groupId', '[0-9]+');
 Route::delete('/group/{groupId}', [Group::class, 'delete'])->where('groupId', '[0-9]+');
 
 Route::post('/user/', [User::class, 'create']);
@@ -53,6 +56,8 @@ Route::put('/visit/{visitId}/', [Visit::class, 'change'])->where('visitId', '[0-
 
 Route::post('/subscribe/', [Subscribe::class, 'create']);
 Route::put('/subscribe/{subscribeId}/payment/', [Subscribe::class, 'paymentChange'])->where('subscribeId', '[0-9]+');
+Route::get('/subscribe/{subscribeId}/', [Subscribe::class, 'get'])->where('subscribeId', '[0-9]+');
+Route::put('/subscribe/{subscribeId}/', [Subscribe::class, 'update'])->where('subscribeId', '[0-9]+');
 Route::delete('/subscribe/{subscribeId}', [Subscribe::class, 'delete'])->where('subscribeId', '[0-9]+');
 
 Route::post('/note/', [Note::class, 'create']);

@@ -13,8 +13,7 @@ class User
          return DB::table('students')->insert([
            'name' => $request->get('name'),
            'phone' => $request->get('phone'),
-           'comment' => $request->get('comment'),
-           'group_id' => $request->get('group_id')
+           'comment' => $request->get('comment')
         ]);
     }
 
@@ -41,6 +40,10 @@ class User
                 'name' => $user->name
             ];
         }
+        $sort = function ($a, $b){
+            return strcmp($a["name"], $b["name"]);
+        };
+        usort($students, $sort);
         return $students;
     }
 
@@ -73,8 +76,6 @@ class User
     public function getSubscribes(int $userId): array
     {
         $subscribeList = [];
-        $visitCount = 0;
-
         $subscribes = Student::find($userId)->subscribes;
         foreach($subscribes as $subscribe){
             $visits = [];
@@ -86,10 +87,11 @@ class User
 
             foreach($visitList as $visit){
                 $visits[] = [
-                  'id' => $visit->id,
-                  'date_visit' => $visit->date_visit,
-                  'visited' => $visit->visited > 0,
-                  'event_id' => $visit->event_id
+                    'id' => $visit->id,
+                    'date_visit' => $visit->date_visit,
+                    'visited' => $visit->visited > 0,
+                    'event_id' => $visit->event_id,
+                    'subscribe_id' => $visit->subscribe_id
                 ];
 
                 if($visit->visited > 0)
@@ -103,6 +105,7 @@ class User
                 'name' => $subscribe->name,
                 'price' => $subscribe->price,
                 'count' => $subscribe->count,
+                'groupId' => $groupName->id,
                 'groupName' => $groupName->name,
                 'date_end' => $subscribe->date_end,
                 'payment' => $subscribe->payment,
