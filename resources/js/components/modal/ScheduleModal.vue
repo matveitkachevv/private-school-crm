@@ -121,12 +121,6 @@ export default {
             }
             this.$store.commit('addToNewEvent', groupData);
 
-            const nameData = {
-                key: 'name',
-                value: 'Занятие'
-            }
-            this.$store.commit('addToNewEvent', nameData);
-
             const classData = {
                 key: 'class',
                 value: 'lesson'

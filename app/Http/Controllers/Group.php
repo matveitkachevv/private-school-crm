@@ -23,19 +23,13 @@ class Group
 
     public function setStudentsGroup(int $groupId, Request $request): bool
     {
+        \App\Models\GroupStudent::where(['group_id' => $groupId])->delete();
         $students = $request->get('students') ?? [];
         for($i = 0; $i < count($students); $i++){
-            $inGroup = \App\Models\GroupStudent::where([
+            \App\Models\GroupStudent::updateOrInsert([
                 'student_id' => $students[$i],
                 'group_id' => $groupId
-            ])->get('id');
-
-            if(count($inGroup) <= 0){
-                \App\Models\GroupStudent::insert([
-                    'student_id' => $students[$i],
-                    'group_id' => $groupId
-                ]);
-            }
+            ]);
         }
         return true;
     }

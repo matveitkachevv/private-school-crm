@@ -19,11 +19,10 @@ class Subscribe
         ]);
         if($subscribeId > 0){
             $studentId = $request->get('studentId');
-            \App\Models\SubscribeStudent::insert([
+            return \App\Models\SubscribeStudent::insertGetId([
                 'subscribe_id' => $subscribeId,
                 'student_id' => $studentId,
             ]);
-            return true;
         }
         return false;
     }

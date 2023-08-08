@@ -32,12 +32,14 @@ class Event
     {
         foreach($request->get('repeats') as $date){
             $groupId = $request->get('group_id');
+            $group = \App\Models\Group::find($groupId);
+
             $dateStart = (new DateTime($date['start']))->format('Y-m-d H:i:00');
             $dateEnd = (new DateTime($date['end']))->format('Y-m-d H:i:00');
             $newEvent = \App\Models\Event::insert([
                 'date_start' => $dateStart,
                 'date_end' => $dateEnd,
-                'name' => $request->get('name'),
+                'name' => $group->name,
                 'class' => $request->get('class'),
                 'cabinet_id' => $request->get('cabinet_id'),
                 'group_id' => $groupId
