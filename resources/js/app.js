@@ -3,6 +3,7 @@ import './bootstrap';
 
 import {createApp} from 'vue'
 import App from './components/App.vue'
+import Login from './components/auth/Login.vue'
 
 import '@mdi/font/css/materialdesignicons.css'
 import 'vuetify/styles'
@@ -28,3 +29,8 @@ createApp(App)
     .use(router)
     .use(store)
     .mount('#app')
+
+createApp(Login)
+    .use(vuetify)
+    .use(router)
+    .mount('#login')

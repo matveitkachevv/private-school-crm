@@ -7,6 +7,7 @@ import UserDetail from "./components/detail/UserDetail.vue";
 import Cabinets from "./components/Cabinets.vue";
 import Notes from './components/Notes.vue'
 import NoteDetail from "./components/detail/NoteDetail.vue";
+import Login from './components/auth/Login.vue';
 
 
 export default [
@@ -14,6 +15,11 @@ export default [
         path: '/',
         name: 'Schedule',
         component: Schedule
+    },
+    {
+        path: '/login',
+        name: 'Login',
+        component: Login
     },
     {
         path: '/event/:id/detail/',

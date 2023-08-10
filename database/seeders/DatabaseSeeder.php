@@ -2,8 +2,8 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,11 +14,23 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // \App\Models\User::factory(10)->create();
+        if($this->hasAdminData()){
+            DB::table('users')->insert([
+                'name' => env('USER_LOGIN'),
+                'email' => env('USER_EMAIL'),
+                'password' =>  (new \Illuminate\Hashing\BcryptHasher)->make(env('USER_PASSWORD'))
+            ]);
+        }
+    }
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+    private function hasAdminData(): bool
+    {
+        if(
+            !empty(env('USER_LOGIN'))
+            && !empty(env('USER_EMAIL'))
+            && !empty(env('USER_PASSWORD'))
+        )
+            return true;
+        return false;
     }
 }
