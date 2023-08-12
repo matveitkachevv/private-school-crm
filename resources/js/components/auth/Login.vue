@@ -1,6 +1,12 @@
 <template>
     <div class="d-flex align-center justify-center" style="height: 100vh">
-        <v-sheet width="600" class="mx-auto main-form">
+        <v-sheet
+            :elevation="10"
+            max-width="600"
+            min-width="200"
+            class="w-100 mx-auto main-form"
+            rounded
+        >
             <v-form fast-fail @submit.prevent="login">
                 <v-text-field v-model="username" label="Логин"/>
                 <v-text-field
