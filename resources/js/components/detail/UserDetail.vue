@@ -73,7 +73,9 @@
                 v-if="!edit"
                 cols="12">
                 <h4>Комментарий:</h4>
-                {{ user.comment }}
+                <div class="comment-field">
+                    {{ user.comment }}
+                </div>
             </v-col>
             <v-col
                 cols="3"
@@ -193,3 +195,9 @@ import SubscribesListComponent from "../lists/SubscribesList.vue";
         }
     }
 </script>
+
+<style scoped>
+.comment-field{
+    white-space: pre-line;
+}
+</style>
