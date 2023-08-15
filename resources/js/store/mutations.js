@@ -46,17 +46,10 @@ export default {
     setNotes (state, notes) {
         state.notes = notes;
     },
-    createEvent (state) {
-        axios({
-            method: 'post',
-            url: '/event/',
-            data: {
-                name: state.newEvent.name,
-                class: state.newEvent.class,
-                cabinet_id: state.newEvent.cabinet_id,
-                group_id: state.newEvent.group_id,
-                repeats: state.newEvent.repeat,
-           }
-        });
+    modalShow (state, show) {
+        state.modal.show = show;
+    },
+    modalMessage (state, message) {
+        state.modal.message = message;
     },
 }

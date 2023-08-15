@@ -5,7 +5,6 @@
         </v-row>
         <v-row>
             <v-col>
-                <h3>{{ event.groupName }}</h3>
                 <v-btn @click="showGroup()">
                     Открыть детальную группы
                 </v-btn>
@@ -40,10 +39,20 @@
             v-if="isVisits"
             v-for="visit in event.visits">
                 <v-checkbox
+                    v-if="visit.subscribe_id > 0"
                     v-model="visit.visited"
                     @click="changeVisited(visit.id)"
                     :label="visit.userName + ' посетил'">
                 </v-checkbox>
+                <div
+                    class="my-2"
+                    v-else>
+                    {{ visit.userName }}
+                    <v-btn
+                        @click="addToEvent(visit.userId)">
+                        Добавить в занятие
+                    </v-btn>
+                </div>
         </v-row>
     </v-container>
 </template>
@@ -114,6 +123,21 @@
                 }).then(response => {
                     if(response.status === 200){
                         __this.getEventData();
+                    }
+                });
+            },
+            addToEvent(userId){
+                const __this = this;
+                axios({
+                    method: 'put',
+                    url: '/event/' + this.event.id + '/group/' + this.event.groupId + '/user/' + userId + '/subscribe/'
+                }).then(response => {
+                    if(response.status === 200 && response.data > 0)
+                        __this.getEventData();
+                    else{
+                        const message = 'Данный пользователь не имеет абонемент';
+                        __this.$store.commit('modalMessage', message);
+                        __this.$store.commit('modalShow', true);
                     }
                 });
             }

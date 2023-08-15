@@ -9,16 +9,19 @@ class Group
 {
     public function getAll(): array
     {
-        $groups = [];
+        $result = [];
+        $groups = \App\Models\Group::select(['id', 'name'])
+            ->orderBy('name')
+            ->get();
 
-        foreach(\App\Models\Group::all() as $group){
-            $groups[] = [
+        $groups->each(function($group) use(&$result){
+            $result[] = [
                 'id' => $group->id,
                 'name' => $group->name
             ];
-        }
+        });
 
-        return $groups;
+        return $result;
     }
 
     public function setStudentsGroup(int $groupId, Request $request): bool

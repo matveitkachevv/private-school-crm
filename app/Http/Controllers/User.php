@@ -34,16 +34,16 @@ class User
     public function getAll(): array
     {
         $students = [];
-        foreach(Student::all() as $user){
+        $users = Student::select(['id', 'name'])
+            ->orderBy('name')
+            ->get();
+
+        $users->each(function ($user) use(&$students){
             $students[] = [
                 'id' => $user->id,
                 'name' => $user->name
             ];
-        }
-        $sort = function ($a, $b){
-            return strcmp($a["name"], $b["name"]);
-        };
-        usort($students, $sort);
+        });
         return $students;
     }
 

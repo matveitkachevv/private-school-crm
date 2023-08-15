@@ -28,6 +28,34 @@ class Event
         return $events;
     }
 
+    public function addUserToEvent(int $eventId, int $groupId, int $userId)
+    {
+        $subscribeIds = [];
+        $userSubscribes = \App\Models\SubscribeStudent::where('student_id', $userId)->get('subscribe_id');
+        $userSubscribes->each(function ($subscribe) use(&$subscribeIds){
+            $subscribeIds[] = $subscribe->subscribe_id;
+        });
+        $currentSubscribe = \App\Models\Subscribe::whereIn('id', $subscribeIds)
+            ->where('date_end', '>=', (new DateTime)->format('Y-m-d'))
+            ->where('group_id', $groupId)
+            ->first();
+
+        if($currentSubscribe){
+            $currentEvent = \App\Models\Event::find($eventId);
+            if($currentEvent){
+                $dateVisit = (new \DateTime($currentEvent->date_start))->format('d.m.Y');
+                return DB::table('visits')->updateOrInsert([
+                    'date_visit' => $dateVisit,
+                    'visited' => false,
+                    'subscribe_id' => $currentSubscribe->id,
+                    'event_id' => $currentEvent->id,
+                ]);
+            }
+        }
+
+        return false;
+    }
+
     public function create(Request $request): bool
     {
         foreach($request->get('repeats') as $date){
@@ -37,14 +65,14 @@ class Event
             $dateEnd = new \DateTime($date['end']);
 
             $event = new \App\Models\Event;
-            $event->create(
+            return $event->create(
                 $groupId,
                 $cabinetId,
                 $dateStart,
                 $dateEnd
             );
         }
-        return true;
+        return false;
     }
 
     public function get(int $eventId): array

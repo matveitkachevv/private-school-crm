@@ -20,4 +20,10 @@ export default {
     getNotes (state) {
         return state.notes;
     },
+    modalShow (state) {
+        return state.modal.show;
+    },
+    modalMessage (state) {
+        return state.modal.message;
+    },
 }

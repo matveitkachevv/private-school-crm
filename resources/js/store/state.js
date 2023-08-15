@@ -19,4 +19,8 @@ export default {
         ['mdi-door', 'Кабинеты', '/cabinets/'],
         ['mdi-note-outline', 'Заметки', '/notes/'],
     ],
+    modal: {
+        show: false,
+        message: 'Ошибка'
+    }
 }

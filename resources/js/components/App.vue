@@ -30,11 +30,16 @@
                 </v-row>
             </v-container>
         </v-main>
+        <modal/>
     </v-app>
 </template>
 
 <script>
+import Modal from './modal/Message.vue';
 export default {
+    components: {
+      Modal
+    },
     data: () => ({
         drawer: false,
         links: [],

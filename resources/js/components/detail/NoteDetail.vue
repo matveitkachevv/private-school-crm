@@ -36,6 +36,10 @@ export default {
         }).then(response => {
             if(response.status === 200){
                 this.note = response.data
+            } else{
+                const message = 'Что-то пошло не так';
+                this.$store.commit('modalMessage', message);
+                this.$store.commit('modalShow', true);
             }
         });
     },
@@ -47,6 +51,10 @@ export default {
             }).then(response => {
                 if(response.status === 200){
                     this.$router.push('/notes/');
+                } else {
+                    const message = 'Что-то пошло не так';
+                    this.$store.commit('modalMessage', message);
+                    this.$store.commit('modalShow', true);
                 }
             });
         }

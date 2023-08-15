@@ -37,6 +37,10 @@ Route::middleware(Authenticate::class)->group(function(){
     Route::get('/events/', [Event::class, 'getAll']);
     Route::post('/event/', [Event::class, 'create']);
     Route::get('/event/{eventId}', [Event::class, 'get'])->where('eventId', '[0-9]+');
+    Route::put('/event/{eventId}/group/{groupId}/user/{userId}/subscribe/', [Event::class, 'addUserToEvent'])
+        ->where('eventId', '[0-9]+')
+        ->where('groupId', '[0-9]+')
+        ->where('userId', '[0-9]+');
     Route::delete('/event/{eventId}', [Event::class, 'delete'])->where('eventId', '[0-9]+');
 
     Route::get('/groups/', [Group::class, 'getAll']);

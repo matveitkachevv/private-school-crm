@@ -18,7 +18,23 @@ export default {
         context.commit('clearNewEvent')
     },
     createEvent (context) {
-        context.commit('createEvent')
+        axios({
+            method: 'post',
+            url: '/event/',
+            data: {
+                name: context.state.newEvent.name,
+                class: context.state.newEvent.class,
+                cabinet_id: context.state.newEvent.cabinet_id,
+                group_id: context.state.newEvent.group_id,
+                repeats: context.state.newEvent.repeat,
+            }
+        }).then(response => {
+            if(response.status === 200 && response.data <= 0){
+                const message = 'Невозможно создать занятие. \n\r Данное время уже занято';
+                context.commit('modalMessage', message);
+                context.commit('modalShow', true);
+            }
+        });
     },
     getNotes (context) {
         axios({
