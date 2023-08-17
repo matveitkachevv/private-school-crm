@@ -84,4 +84,12 @@ class Event
     {
         return DB::table('events')->delete($eventId);
     }
+
+    public function update(int $eventId, Request $request): bool
+    {
+        $cabinetId = $request->get('cabinetId');
+        $dateStart = new \DateTime($request->get('dateStart'));
+        $dateEnd = new \DateTime($request->get('dateEnd'));
+        return (new \App\Models\Event)->updateEvent($eventId, $cabinetId, $dateStart, $dateEnd);
+    }
 }

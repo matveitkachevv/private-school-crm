@@ -12,6 +12,14 @@
         </v-row>
         <v-row>
             <v-col>
+                <event-edit-modal-component
+                    @updateEvent="getEventData"
+                    :event-id="event.id"
+                />
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col>
                 <v-btn @click="deleteEvent()">
                     Удалить запись
                 </v-btn>
@@ -58,8 +66,14 @@
 </template>
 
 <script>
+    import EventEdit from "../modal/EventEdit.vue";
+    import EventEditModalComponent from "../modal/EventEdit.vue";
     export default {
         name: 'EventDetailComponent',
+        components: {
+            EventEditModalComponent,
+            EventEdit
+        },
         data(){
             return {
                 event: {}

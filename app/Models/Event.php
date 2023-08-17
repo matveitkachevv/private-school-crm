@@ -10,6 +10,12 @@ class Event extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'date_start',
+        'date_end',
+        'cabinet_id'
+    ];
+
     public function create(int $groupId, int $cabinetId, \DateTime $dateStart, \DateTime $dateEnd): bool
     {
         $group = \App\Models\Group::find($groupId);
@@ -111,13 +117,27 @@ class Event extends Model
         ];
     }
 
-    private function freeDates(int $cabinetId, \DateTime $dateStart, \DateTime $dateEnd): bool
+    public function updateEvent(int $eventId, int $cabinetId, \DateTime $dateStart, \DateTime $dateEnd): bool
     {
-        return !DB::table('events')
+        if($this->freeDates($cabinetId, $dateStart, $dateEnd, $eventId))
+            return $this->find($eventId)->update([
+                'cabinet_id' => $cabinetId,
+                'date_start' => $dateStart,
+                'date_end' => $dateEnd,
+            ]);
+        return false;
+    }
+
+    private function freeDates(int $cabinetId, \DateTime $dateStart, \DateTime $dateEnd, int $eventId = 0): bool
+    {
+        $events = DB::table('events')
             ->where('cabinet_id', $cabinetId)
             ->where('date_start', '<', $dateEnd->format('Y-m-d H:i:s'))
-            ->where('date_end', '>', $dateStart->format('Y-m-d H:i:s'))
-            ->count();
+            ->where('date_end', '>', $dateStart->format('Y-m-d H:i:s'));
+        if($eventId > 0){
+            $events->whereNot('id', $eventId);
+        }
+        return !$events->count();
     }
 
     public function group()
