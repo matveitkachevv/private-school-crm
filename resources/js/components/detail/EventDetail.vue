@@ -103,6 +103,11 @@
                 }).then(response => {
                     if(response.status === 200)
                         __this.event = response.data;
+                }).catch(error => {
+                    if(error.response.data.error){
+                        __this.$store.commit('modalMessage', error.response.data.message);
+                        __this.$store.commit('modalShow', true);
+                    }
                 });
             },
             dateConvert(dateString){
@@ -148,9 +153,9 @@
                 }).then(response => {
                     if(response.status === 200 && response.data > 0)
                         __this.getEventData();
-                    else{
-                        const message = 'Данный пользователь не имеет абонемент';
-                        __this.$store.commit('modalMessage', message);
+                }).catch(error => {
+                    if(error.response.data.error){
+                        __this.$store.commit('modalMessage', error.response.data.message);
                         __this.$store.commit('modalShow', true);
                     }
                 });

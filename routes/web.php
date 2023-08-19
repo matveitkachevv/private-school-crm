@@ -57,6 +57,7 @@ Route::middleware(Authenticate::class)->group(function(){
     Route::post('/user/', [User::class, 'create']);
     Route::get('/users/', [User::class, 'getAll']);
     Route::get('/user/{userId}/', [User::class, 'get'])->where('userId', '[0-9]+');
+    Route::get('/user/{userId}/groups/', [User::class, 'getUserGroups'])->where('userId', '[0-9]+');
     Route::get('/user/{userId}/subscribes/', [User::class, 'getSubscribes'])->where('userId', '[0-9]+');
     Route::put('/user/{userId}/group/change/', [User::class, 'changeGroup'])->where('userId', '[0-9]+');
     Route::put('/user/{userId}/', [User::class, 'update'])->where('userId', '[0-9]+');

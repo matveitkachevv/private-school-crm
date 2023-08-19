@@ -28,10 +28,9 @@ export default {
                 group_id: context.state.newEvent.group_id,
                 repeats: context.state.newEvent.repeat,
             }
-        }).then(response => {
-            if(response.status === 200 && response.data <= 0){
-                const message = 'Невозможно создать занятие. \n\r Данное время уже занято';
-                context.commit('modalMessage', message);
+        }).catch(error => {
+            if(error.response.data.error){
+                context.commit('modalMessage', error.response.data.message);
                 context.commit('modalShow', true);
             }
         });

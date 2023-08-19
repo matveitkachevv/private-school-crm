@@ -7,6 +7,23 @@ use Illuminate\Support\Facades\DB;
 
 class Note
 {
+    public function getAll(): array
+    {
+        $notes = [];
+        $noteList = \App\Models\Note::all();
+        $noteList->each(function ($note) use(&$notes){
+            $notes[] = [
+                'id' => $note->id,
+                'title' => $note->text,
+                'start' => $note->date_start,
+                'end' => $note->date_end,
+                'background' => true,
+                'class' => 'note',
+            ];
+        });
+        return $notes;
+    }
+
     public function create(Request $request): bool
     {
         $dateStart = $request->get('dateStart');
@@ -20,22 +37,6 @@ class Note
         ]);
     }
 
-    public function getAll(): array
-    {
-        $notes = [];
-        foreach(\App\Models\Note::all() as $note){
-            $notes[] = [
-                'id' => $note->id,
-                'title' => $note->text,
-                'start' => $note->date_start,
-                'end' => $note->date_end,
-                'background' => true,
-                'class' => 'note',
-            ];
-        }
-        return $notes;
-    }
-
     public function get($noteId): array
     {
         $note = \App\Models\Note::find($noteId);
@@ -47,7 +48,7 @@ class Note
         ];
     }
 
-    public function delete($noteId): bool
+    public function delete(int $noteId): bool
     {
         return DB::table('notes')->delete($noteId);
     }

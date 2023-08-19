@@ -45,7 +45,7 @@
                             </v-col>
                             <v-col>
                                 <v-autocomplete
-                                    :items="$store.getters.getGroups"
+                                    :items="userGroups"
                                     v-model="subscribe.group_id"
                                     label="Группа"
                                     item-title="name"
@@ -92,6 +92,7 @@ export default {
     ],
     data: () => ({
         dialog: false,
+        userGroups: [],
         subscribe: {
             name: '',
             cost: 0,
@@ -100,8 +101,11 @@ export default {
             group_id: null,
         }
     }),
-    mounted(){
-        this.$store.dispatch('getGroups');
+    watch: {
+        student(studentId){
+            if(studentId > 0){}
+            this.getUserGroups();
+        }
     },
     methods: {
         send(){
@@ -117,6 +121,21 @@ export default {
                 if(response.status === 200){
                     __this.$emit('restart', true);
                     __this.dialog = false;
+                }
+            });
+        },
+        getUserGroups(){
+            axios({
+                method: 'get',
+                url: '/user/' + this.student + '/groups/'
+            }).then(response => {
+                if(response.status === 200){
+                    this.userGroups = response.data;
+                }
+            }).catch(error => {
+                if(error.response.data.error){
+                    this.$store.commit('modalMessage', error.response.data.message);
+                    this.$store.commit('modalShow', true);
                 }
             });
         }

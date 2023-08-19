@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use function PHPUnit\TestFixture\func;
 
 class User
 {
@@ -73,11 +74,38 @@ class User
         ]);
     }
 
+    public function getUserGroups(int $userId): array
+    {
+        $groupIds = [];
+        $groups = \App\Models\GroupStudent::where(['student_id' => $userId])->get('group_id');
+        $groups->each(function($group) use(&$groupIds){
+            $groupIds[] = $group->group_id;
+        });
+
+        $groupsList = [];
+        $groups = \App\Models\Group::whereIn('id', $groupIds)
+            ->select(['id', 'name'])
+            ->orderBy('name')
+            ->get();
+
+        $groups->each(function($group) use (&$groupsList){
+            $groupsList[] = [
+                'id' => $group->id,
+                'name' => $group->name
+            ];
+        });
+        return $groupsList;
+    }
+
     public function getSubscribes(int $userId): array
     {
         $subscribeList = [];
-        $subscribes = Student::find($userId)->subscribes;
-        foreach($subscribes as $subscribe){
+        $subscribes = Student::find($userId)
+            ->subscribes
+            ->sortDesc()
+            ->take(3);
+
+        $subscribes->each(function($subscribe) use(&$subscribeList){
             $visits = [];
             $visitCount = 0;
 
@@ -112,7 +140,8 @@ class User
                 'visits' => $visits,
                 'visit_count' => $visitCount,
             ];
-        }
+        });
+
         return $subscribeList;
     }
 }

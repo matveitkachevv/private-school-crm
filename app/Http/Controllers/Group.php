@@ -63,25 +63,13 @@ class Group
         ]);
     }
 
-    public function get(int $groupId): array
+    public function get(int $groupId): \Illuminate\Http\JsonResponse
     {
-        $group = \App\Models\Group::find($groupId);
-        $students = [];
-
-        $groupStudentsIds = \App\Models\GroupStudent::where(['group_id' => $groupId])->get('student_id');
-        foreach($groupStudentsIds as $studentId){
-            $student = \App\Models\Student::find($studentId->student_id);
-            $students[$student->id] = [
-                'id' => $student->id,
-                'name' => $student->name
-            ];
+        try{
+            return response()->json((new \App\Models\Group)->get($groupId));
+        } catch (\ErrorException $e){
+            return response()->json(['error' => true, 'message' => $e->getMessage()], $e->getCode());
         }
-
-        return [
-            'id' => $group->id,
-            'name' => $group->name,
-            'students' => $students
-        ];
     }
 
     public function delete($groupId): int

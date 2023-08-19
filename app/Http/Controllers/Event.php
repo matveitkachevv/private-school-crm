@@ -11,73 +11,62 @@ class Event
     public function getAll(): array
     {
         $events = [];
-
-        foreach(\App\Models\Event::all() as $event){
+        $eventsList = \App\Models\Event::all();
+        $eventsList->each(function ($event) use(&$events){
             $events[] = [
                 'id' => $event->id,
-                'start' => (new DateTime($event->date_start))->format('Y-m-d H:i'),
-                'end' => (new DateTime($event->date_end))->format('Y-m-d H:i'),
+                'start' => (new \DateTime($event->date_start))->format('Y-m-d H:i'),
+                'end' => (new \DateTime($event->date_end))->format('Y-m-d H:i'),
                 'title' => $event->name,
                 'class' => $event->class,
                 'group_id' => $event->group_id,
                 'split' => $event->cabinet_id,
                 'background' => true
             ];
-        }
-
+        });
         return $events;
     }
 
-    public function addUserToEvent(int $eventId, int $groupId, int $userId)
+    public function addUserToEvent(int $eventId, int $groupId, int $userId): \Illuminate\Http\JsonResponse
     {
-        $subscribeIds = [];
-        $userSubscribes = \App\Models\SubscribeStudent::where('student_id', $userId)->get('subscribe_id');
-        $userSubscribes->each(function ($subscribe) use(&$subscribeIds){
-            $subscribeIds[] = $subscribe->subscribe_id;
-        });
-        $currentSubscribe = \App\Models\Subscribe::whereIn('id', $subscribeIds)
-            ->where('date_end', '>=', (new DateTime)->format('Y-m-d'))
-            ->where('group_id', $groupId)
-            ->first();
+        try{
+            return response()->json((new \App\Models\Event)->addUserToEvent($eventId, $groupId, $userId));
+        } catch (\ErrorException $e){
+            return response()->json(['error' => true, 'message' => $e->getMessage()], $e->getCode());
+        }
+    }
 
-        if($currentSubscribe){
-            $currentEvent = \App\Models\Event::find($eventId);
-            if($currentEvent){
-                $dateVisit = (new \DateTime($currentEvent->date_start))->format('d.m.Y');
-                return DB::table('visits')->updateOrInsert([
-                    'date_visit' => $dateVisit,
-                    'visited' => false,
-                    'subscribe_id' => $currentSubscribe->id,
-                    'event_id' => $currentEvent->id,
-                ]);
+    public function create(Request $request): \Illuminate\Http\JsonResponse
+    {
+        try {
+            foreach ($request->get('repeats') as $date) {
+                $groupId = (int)$request->get('group_id');
+                $cabinetId = (int)$request->get('cabinet_id');
+                $dateStart = new \DateTime($date['start']);
+                $dateEnd = new \DateTime($date['end']);
+
+                $event = new \App\Models\Event;
+                return response()
+                    ->json($event->create(
+                        $groupId,
+                        $cabinetId,
+                        $dateStart,
+                        $dateEnd
+                    ));
             }
+        } catch (\ErrorException $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], $e->getCode());
         }
-
-        return false;
+        return response()->json(['error' => true, 'message' => 'Не удалось создать занятие'], 401);
     }
 
-    public function create(Request $request): bool
+    public function get(int $eventId): \Illuminate\Http\JsonResponse
     {
-        foreach($request->get('repeats') as $date){
-            $groupId = (int)$request->get('group_id');
-            $cabinetId = (int)$request->get('cabinet_id');
-            $dateStart = new \DateTime($date['start']);
-            $dateEnd = new \DateTime($date['end']);
-
-            $event = new \App\Models\Event;
-            return $event->create(
-                $groupId,
-                $cabinetId,
-                $dateStart,
-                $dateEnd
-            );
+        try {
+            return response()->json((new \App\Models\Event)->get($eventId));
+        } catch (\ErrorException $e) {
+            return response()->json(['error' => true, 'message' => $e->getMessage()], $e->getCode());
         }
-        return false;
-    }
-
-    public function get(int $eventId): array
-    {
-        return (new \App\Models\Event)->get($eventId);
     }
 
     public function delete($eventId): int
@@ -85,11 +74,15 @@ class Event
         return DB::table('events')->delete($eventId);
     }
 
-    public function update(int $eventId, Request $request): bool
+    public function update(int $eventId, Request $request): \Illuminate\Http\JsonResponse
     {
-        $cabinetId = $request->get('cabinetId');
-        $dateStart = new \DateTime($request->get('dateStart'));
-        $dateEnd = new \DateTime($request->get('dateEnd'));
-        return (new \App\Models\Event)->updateEvent($eventId, $cabinetId, $dateStart, $dateEnd);
+        try{
+            $cabinetId = $request->get('cabinetId');
+            $dateStart = new \DateTime($request->get('dateStart'));
+            $dateEnd = new \DateTime($request->get('dateEnd'));
+            return response()->json((new \App\Models\Event)->updateEvent($eventId, $cabinetId, $dateStart, $dateEnd));
+        } catch (\ErrorException $e){
+            return response()->json(['error' => true, 'message' => $e->getMessage()], $e->getCode());
+        }
     }
 }

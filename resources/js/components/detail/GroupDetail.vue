@@ -139,6 +139,11 @@ export default {
                 if(response.status === 200){
                     __this.group = response.data;
                 }
+            }).catch(error => {
+                if(error.response.data.error){
+                    __this.$store.commit('modalMessage', error.response.data.message);
+                    __this.$store.commit('modalShow', true);
+                }
             });
         }
     }

@@ -113,8 +113,10 @@ export default{
                     this.$emit('updateEvent');
                     this.$store.dispatch('getEvents');
                     this.dialog = false;
-                } else {
-                    this.$store.commit('modalMessage', 'Невозможно создать занятие. \n\r Данное время уже занято');
+                }
+            }).catch(error => {
+                if(error.response.data.error){
+                    this.$store.commit('modalMessage', error.response.data.message);
                     this.$store.commit('modalShow', true);
                 }
             });

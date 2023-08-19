@@ -10,14 +10,13 @@ class Cabinet
     public function get(): array
     {
         $cabinets = [];
-
-        foreach(\App\Models\Cabinet::all() as $cabinet){
+        $cabinetList = \App\Models\Cabinet::all();
+        $cabinetList->each(function ($cabinet) use(&$cabinets){
             $cabinets[] = [
                 'id' => $cabinet->id,
                 'label' => $cabinet->name
             ];
-        }
-
+        });
         return $cabinets;
     }
 
@@ -28,7 +27,7 @@ class Cabinet
         ]);
     }
 
-    public function delete($cabinetId): int
+    public function delete(int $cabinetId): int
     {
         return DB::table('cabinets')->delete($cabinetId);
     }
