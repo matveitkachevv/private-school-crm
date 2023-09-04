@@ -21,12 +21,16 @@
                             sm="6"
                         >
                             <v-autocomplete
-                                :items="$store.getters.getStudents"
+                                :items="items"
                                 v-model="students"
                                 label="Ученики"
                                 item-title="name"
                                 item-value="id"
                                 multiple
+                                cache-items
+                                hide-no-data
+                                hide-details
+                                v-model:search="search"
                             ></v-autocomplete>
                         </v-col>
                     </v-row>
@@ -59,7 +63,9 @@ export default {
     props: ['groupId'],
     data(){
         return {
+            items: [],
             students: [],
+            search: null,
             dialog: false,
         }
     },
@@ -67,7 +73,17 @@ export default {
         this.getStudentsGroup();
         this.$store.dispatch('getStudents');
     },
+    watch: {
+        search(val){
+            this.querySelections(val);
+        }
+    },
     methods: {
+        querySelections (v) {
+            this.items = this.$store.getters.getStudents.filter(e => {
+                return (e.name || '').toLowerCase().indexOf((v || '').toLowerCase()) > -1
+            }).slice(0, 3);
+        },
         saveGroup(){
             axios({
                 method: 'post',
