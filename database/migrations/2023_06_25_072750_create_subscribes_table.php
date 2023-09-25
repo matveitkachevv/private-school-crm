@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('price');
             $table->integer('count');
             $table->date('date_end');
+            $table->date('date_start');
             $table->boolean('payment')->default(true);
 
             // groups

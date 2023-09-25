@@ -135,6 +135,7 @@ class User
                 'count' => $subscribe->count,
                 'groupId' => $groupName->id,
                 'groupName' => $groupName->name,
+                'date_start' => $subscribe->date_start,
                 'date_end' => $subscribe->date_end,
                 'payment' => $subscribe->payment,
                 'visits' => $visits,

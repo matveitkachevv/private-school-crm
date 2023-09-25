@@ -15,7 +15,8 @@ class Subscribe
             'price' => $subscribe['cost'],
             'count' => $subscribe['count'],
             'date_end' => $subscribe['dateEnd'],
-            'group_id' => $subscribe['group_id']
+            'group_id' => $subscribe['group_id'],
+            'date_start' => $subscribe['dateStart'],
         ]);
         if($subscribeId > 0){
             $studentId = $request->get('studentId');

@@ -55,6 +55,13 @@
                             <v-col
                                 cols="12"
                             >
+                                <label>Начало действия абонемента</label>
+                                <br>
+                                <input type="date" v-model="subscribe.dateStart">
+                            </v-col>
+                            <v-col
+                                cols="12"
+                            >
                                 <label>Окончание действия абонемента</label>
                                 <br>
                                 <input type="date" v-model="subscribe.dateEnd">
@@ -98,6 +105,7 @@ export default {
             cost: 0,
             count: 4,
             dateEnd: '',
+            dateStart: '',
             group_id: null,
         }
     }),

@@ -48,6 +48,12 @@
                 class="subscribe-row-data py-0"
                 cols="12"
             >
+                Действует с: <b>{{ convertToDdMmYyyy(subscribe.date_start) }}</b>
+            </v-col>
+            <v-col
+                class="subscribe-row-data py-0"
+                cols="12"
+            >
                 Действует до: <b>{{ convertToDdMmYyyy(subscribe.date_end) }}</b>
             </v-col>
             <v-col
